@@ -3,7 +3,6 @@ import {
   IsNotEmpty,
   IsEmail,
   IsDateString,
-  IsPhoneNumber,
   Matches,
   Length,
 } from 'class-validator';
