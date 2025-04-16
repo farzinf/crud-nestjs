@@ -4,6 +4,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import configuration from './config/configuration';
 import { InfrastructureModule } from './infrastructure/infrastructure.module';
+import { PresentationModule } from './presentation/presentation.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { InfrastructureModule } from './infrastructure/infrastructure.module';
     }),
     CqrsModule,
     InfrastructureModule,
+    PresentationModule,
   ],
 })
 export class AppModule {}
