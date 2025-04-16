@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import configuration from './config/configuration';
 
@@ -16,6 +17,7 @@ import configuration from './config/configuration';
       }),
       inject: [ConfigService],
     }),
+    CqrsModule,
   ],
 })
 export class AppModule {}
