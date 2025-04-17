@@ -2,8 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe, HttpStatus } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
-// import { ConfigService } from '@nestjs/config';
-// import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CustomerEntity } from '../src/infrastructure/database/entities/customer.entity';
@@ -35,7 +33,12 @@ describe('CustomersController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(
       new ValidationPipe({
-        /* ... options from main.ts */
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
       }),
     );
     await app.init();
@@ -93,6 +96,7 @@ describe('CustomersController (e2e)', () => {
 
     it('should return 400 for invalid phone number format (E.164)', async () => {
       const createDto: CreateCustomerDto = {
+        // /* ... */ phoneNumber: '12345' /* ... */,
         firstName: 'John',
         lastName: 'Doe',
         dateOfBirth: '1990-05-10',
@@ -114,7 +118,7 @@ describe('CustomersController (e2e)', () => {
         phoneNumber: '+18005551212',
         email: 'john.doe@example.com',
         bankAccountNumber: 'NL91ABNA0417164307',
-      }; // Example non-mobile
+      };
 
       // Need to mock the validator for this specific test case if not using a real non-mobile number that the lib detects
       // jest.spyOn(mockPhoneValidator, 'validate').mockResolvedValueOnce({ isValid: true, isMobile: false });
@@ -132,7 +136,6 @@ describe('CustomersController (e2e)', () => {
 
     it('should return 409 for duplicate email', async () => {
       const createDto: CreateCustomerDto = {
-        // /* ... */ email: 'duplicate@example.com' /* ... */,
         firstName: 'John',
         lastName: 'Doe',
         dateOfBirth: '1990-05-10',
