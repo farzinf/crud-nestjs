@@ -49,5 +49,5 @@ A simple CRUD application for managing customer data, that written for this inte
 - **Unit Tests:** `npm run test`
 - **Integration Tests:** (Configure separately if needed)
 - **E2E Tests:** `npm run test:e2e` (Ensure database is running)
-- **Cucumber Tests:** `npm run test:cucumber` (Ensure database is running)
+- **Cucumber Tests:** `npm run test:cucumber` (Ensure database is running) [report](cucumber-report.html)
 - **Test Coverage:** `npm run test:cov`
