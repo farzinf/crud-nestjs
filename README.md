@@ -1,50 +1,53 @@
-# CRUD Code Test 
+# Customer Management API
 
-Please read each note very carefully!
-Feel free to add/change the project structure to a clean architecture to your view.
-and if you are not able to work on the FrontEnd project, you can add a Swagger UI
-in a new Front project.
+A simple CRUD application for managing customer data, that written for this interview [task](task.md).
 
-Create a simple CRUD application with [NestJS](https://nestjs.com/) that implements the below model:
-```
-Customer {
-	FirstName
-	LastName
-	DateOfBirth
-	PhoneNumber
-	Email
-	BankAccountNumber
-}
-```
+## Features
 
-Create a NestJS template project
+- CRUD operations for Customer entities.
+- Validation:
+  - Unique Email.
+  - Unique combination of FirstName, LastName, and DateOfBirth.
+  - Valid Email format.
+  - Valid **Mobile** Phone Number (using `google-libphonenumber`).
+  - Basic Bank Account Number format check (non-empty, length).
+- API documentation via Swagger UI (`/api-docs`).
 
-## Practices and patterns:
+## Architecture & Patterns
 
-- [TDD](https://en.wikipedia.org/wiki/Test-driven_development)
-- [BDD](https://en.wikipedia.org/wiki/Behavior-driven_development)
-- [DDD](https://en.wikipedia.org/wiki/Domain-driven_design)
-- [Clean architecture](https://dev.to/dipakahirav/modern-api-development-with-nodejs-express-and-typescript-using-clean-architecture-1m77)
-- [CQRS](https://en.wikipedia.org/wiki/Command%E2%80%93query_separation#Command_query_responsibility_separation) pattern ([Event sourcing](https://en.wikipedia.org/wiki/Domain-driven_design#Event_sourcing)).
-- Clean git commits that show your work progress, each commit must provide your decision-making process for each change or selection.
+- **NestJS Framework**
+- **Clean Architecture:** Separation into Core (Domain), Application, Infrastructure, and Presentation layers.
+- **Domain-Driven Design (DDD):** Customer Aggregate Root, Value Objects (Email, PhoneNumber).
+- **CQRS:** Command Query Responsibility Segregation using `@nestjs/cqrs`. Commands for writes, Queries for reads.
+- **Repository Pattern:** Abstracting data persistence (`ICustomerRepository`).
+- **Dependency Injection:** Used throughout via NestJS.
+- **TDD/BDD:** Development driven by tests (Unit, Integration, E2E using Jest/Supertest).
+- **Database:** PostgreSQL with TypeORM.
+- **Phone Number Storage:** Stored as `varchar` in E.164 format for simplicity and compatibility.
 
-### Validations
+## Setup & Running
 
-- During Create; validate the phone number to be a valid *mobile* number only (Please use [Google LibPhoneNumber](https://github.com/google/libphonenumber) to validate number at the backend).
+1.  **Prerequisites:** Node.js (v16+), npm, Docker (optional, for database)
+2.  **Clone:** `git clone ...`
+3.  **Install Dependencies:** `npm install`
+4.  **Database Setup:**
+    - **Option A (Docker):**
+      - Ensure Docker is running.
+      - Copy `.env.example` to `.env` and update `DB_PASSWORD` if needed.
+      - Run `docker-compose up -d` (Add a `docker-compose.yml` for PostgreSQL).
+    - **Option B (Manual):**
+      - Set up a PostgreSQL database.
+      - Create a database (e.g., `customer_management`).
+      - Copy `.env.example` to `.env` and fill in your `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`.
+5.  **Run Migrations (if applicable):** `npm run typeorm migration:run` (Need to add TypeORM CLI config and migration scripts) - _Note: Currently uses `synchronize: true` for dev, disable for prod and use migrations._
+6.  **Run Application:** `npm run start:dev`
+7.  **Access API:** `http://localhost:3000` (or configured port)
+8.  **Access Swagger Docs:** `http://localhost:3000/api-docs`
 
-- A Valid email and a valid bank account number must be checked before submitting the form.
+## Running Tests
 
-- Customers must be unique in the database: By `Firstname`, `Lastname`, and `DateOfBirth`.
-
-- Email must be unique in the database.
-
-### Storage
-
-- Store the phone number in a database with minimized space storage (choose `varchar`/`string`, or `ulong` whichever store less space).
-
-### Delivery
-- Please clone this repository in a new GitHub repository in private mode and share with ID: `mason-chase` in private mode on github.com, make sure you do not erase my commits and then create a [pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) (code review).
-
-## Nice to do:
-- Front-end Web (React)
-- Docker-compose project that loads the database service automatically, which `docker-compose up`
+- **Unit Tests:** `npm run test`
+- **Integration Tests:** (Configure separately if needed)
+- **E2E Tests:** `npm run test:e2e` (Ensure database is running)
+- **Cucumber Tests:** `npm run test:cucumber` (Ensure database is running) [report](cucumber-report.html)
+- **Test Coverage:** `npm run test:cov`
