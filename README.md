@@ -1,6 +1,6 @@
 # Customer Management API
 
-A simple CRUD application for managing customer data, that written for this interview [task](task.md).
+A simple CRUD application for managing customer data
 
 ## Features
 
